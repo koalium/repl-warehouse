@@ -1,0 +1,3 @@
+source /home/esmartis/virtualenv/apps/py/devicehandler/dev/3.11/bin/activate && cd /home/esmartis/apps/py/devicehandler/dev
+pip install flask
+pip install numpy

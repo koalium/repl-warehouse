@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <h2>Domotic Assistant</h2>
+            <button class="add-device">+ Add Device</button>
+            <nav>
+                <p>Devices</p>
+                <div class="card" id="entranceCamera">Entrance Camera - <span>Active</span></div>
+                <div class="card" id="stairsCamera">Stairs Camera - <span>Deactivated</span></div>
+                <div class="card" id="canopies">Canopies - <span>Deactivated</span></div>
+                <div class="card" id="garageDoor">Garage Door - <span>Deactivated</span></div>
+                <div class="card" id="gardenLights">Garden Lights - <span>Active</span></div>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <h2>General Commands</h2>
+            <div class="thermostat-control">
+                <h3>Thermostat</h3>
+                <p class="temperature-display">25°C</p>
+                <button class="temp-button" onclick="changeTemperature(1)">+</button>
+                <button class="temp-button" onclick="changeTemperature(-1)">-</button>
+            </div>
+            <div class="energy-section">
+                <h3>Energy</h3>
+                <p>Current Consumption: 12.4 kWh</p>
+                <label class="toggle-label">
+                    Solar Panels
+                    <input type="checkbox" id="solarToggle">
+                </label>
+                <p class="status-text" id="solarStatus">Disabled</p>
+                <label class="toggle-label">
+                    Power Reserve
+                    <input type="checkbox" id="powerToggle">
+                </label>
+                <p class="status-text" id="powerStatus">Disabled</p>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const devices = ["entranceCamera", "stairsCamera", "canopies", "garageDoor", "gardenLights"];
+            
+            devices.forEach(device => {
+                document.getElementById(device).addEventListener("click", function () {
+                    let status = this.querySelector("span");
+                    if (status.innerText === "Active") {
+                        status.innerText = "Deactivated";
+                        this.classList.remove("active");
+                    } else {
+                        status.innerText = "Active";
+                        this.classList.add("active");
+                    }
+                });
+            });
+        
+            document.getElementById("solarToggle").addEventListener("change", function () {
+                document.getElementById("solarStatus").innerText = this.checked ? "Enabled" : "Disabled";
+            });
+        
+            document.getElementById("powerToggle").addEventListener("change", function () {
+                document.getElementById("powerStatus").innerText = this.checked ? "Enabled" : "Disabled";
+            });
+        });
+        
+        function changeTemperature(amount) {
+            let tempDisplay = document.querySelector(".temperature-display");
+            let currentTemp = parseInt(tempDisplay.innerText);
+            currentTemp += amount;
+            tempDisplay.innerText = currentTemp + "°C";
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background: #1e1e1e;
+            padding: 20px;
+        }
+        .add-device {
+            background: #0a74da;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .card {
+            background: #292929;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .card.active {
+            background: #0a74da;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .thermostat-control, .energy-section {
+            background: #292929;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .temperature-display {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .temp-button {
+            background: #0a74da;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .status-text {
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</body>
+</html>

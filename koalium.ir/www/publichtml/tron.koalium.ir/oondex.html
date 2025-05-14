@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Koaliumi Wallet Portal</title>
+    <style>
+        /* Base Styles */
+        :root {
+            --primary-dark: #6a11cb;
+            --primary-light: #2575fc;
+            --white: rgba(255, 255, 255, 0.95);
+            --particle-size: 3px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary-light));
+            background-size: 400% 400%;
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+            animation: gradientFlow 15s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Container */
+        .main-container {
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            margin: 5vh auto;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        /* Form Elements */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            background: var(--white);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            background: var(--white);
+            color: var(--primary-light);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover, button:focus {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            margin-top: 20px;
+            text-align: center;
+            min-height: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Particle System */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        .particle.icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease-out;
+        }
+
+        .crypto-icon {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.4s ease-out;
+        }
+
+        .fireball {
+            position: absolute;
+            border-radius: 50%;
+            animation: fireballExplode 0.5s ease-out forwards;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .smoke {
+            position: absolute;
+            border-radius: 50%;
+            animation: smokeDrift 2s ease-out forwards;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes fireballExplode {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.8; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        @keyframes smokeDrift {
+            0% { transform: scale(0) translate(0, 0); opacity: 0.8; }
+            50% { transform: scale(1.5) translate(-20px, -20px); opacity: 0.6; }
+            100% { transform: scale(2) translate(-40px, -40px); opacity: 0; }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 25px;
+                margin: 20px auto;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            input[type="text"], button {
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            input[type="text"], button {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+            
+            .particle, .fireball, .smoke {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container" id="particles"></div>
+    
+    <div class="main-container">
+        <h1>Welcome to Koaliumi</h1>
+        <p>Enter your TRC20 wallet address to begin:</p>
+        <form id="walletForm">
+            <div class="input-group">
+                <input type="text" id="walletAddress" 
+                       placeholder="Your TRC20 Wallet Address" required>
+            </div>
+            <button type="submit">Connect Wallet</button>
+        </form>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuration
+            const config = {
+                particleCount: window.innerWidth < 768 ? 80 : 160,
+                followPercentage: 0.3,
+                baseSpeed: 1,
+                explosionChance: 0.008,
+                cryptoIcons: {
+                    trx: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48Y2lyY2xlIGN4PSIxMjAiIGN5PSIxMjAiIHI9IjEyMCIgZmlsbD0iI2Q4MWEyZSIvPjxwYXRoIGQ9Ik0xNjguMyA3MS40TDExOS44IDEyMGw0OC41IDQ4LjVMMjAwIDEyMGwtMzEuNy0zMS43LTQ4LjUgNDguNS00OC41LTQ4LjVMODAgMTIwbDMxLjcgMzEuNyA0OC41LTQ4LjV6IiBmaWxsPSIjZmZmIi8+PC9zdmc+',
+                    eth: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBmaWxsPSIjNjI2Y2ZjIiBkPSJNMTkyIDBMMjkuMyAxMjhsMjIuMSAyNzYuNUwxOTIgNTEybDE0MC42LTEwNy41TDM1NC43IDEyOEwxOTIgMHptMTAxLjUgMzc5LjRMMTkyIDQ0Ni43di02NS4xbDk3LjUtNTkuOHYxMDUuNnptLTk3LjUtMzAuOUwxMzYuNSAzMTkuVjIwOS40bDU2LjUgMzQuNnYxMDUuNXpNMTg0LjEgMTQ0LjRsNTYuNS0zNC42LTU2LjUtMzIuM3Y2Ni45eiIvPjwvc3ZnPg==',
+                    btc: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODQgNTEyIj48cGF0aCBmaWxsPSIjZjM5NjI0IiBkPSJNMzQxLjEgMTUyLjFDMzU1LjggMTY1LjggMzU1LjggMTg3LjEgMzQxLjEgMjAwLjhjLTM3LjkgMzcuOS05OS4zIDM3LjktMTM3LjIgMHMtMzcuOS05OS4zIDAtMTM3LjJjMTQuNy0xNC43IDM2LTE0LjcgNTAuNyAwIDE0LjcgMTQuNyAxNC43IDM2IDAgNTAuNy0xOC43IDE4LjctMTguNyA0OS4xIDAgNjcuOCAxOC43IDE4LjcgNDkuMSAxOC43IDY3LjggMHoiLz48L3N2Zz4=',
+                    usdt: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIj48Y2lyY2xlIGN4PSIxMjAiIGN5PSIxMjAiIHI9IjEyMCIgZmlsbD0iIzI2YTc4NCIvPjxwYXRoIGQ9Ik0xNjUuMiA5OC43aC0xNi43djQ0LjRjMCAxOC4zLTExLjEgMjMuOC0yOC41IDIzLjgtMTcuMyAwLTI4LjUtNS41LTI4LjUtMjMuOFY5OC43SDk0LjR2NDQuNGMwIDM0LjQgMjAuMiA1My4zIDcwLjggNTMuM1MxNjUuMiAxNzcuNSAxNjUuMiAxNDNWOTguN3oiIGZpbGw9IiNmZmYiLz48L3N2Zz4='
+                }
+            };
+
+            // State
+            let particles = [];
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let lastMouseMove = Date.now();
+            let isMouseMoving = false;
+            let animationFrameId;
+
+            // DOM Elements
+            const particlesContainer = document.getElementById('particles');
+            const walletForm = document.getElementById('walletForm');
+            const messageEl = document.getElementById('message');
+
+            // Initialize
+            function init() {
+                createParticles();
+                setupEventListeners();
+                animate();
+            }
+
+            // Create particles
+            function createParticles() {
+                for (let i = 0; i < config.particleCount; i++) {
+                    createParticle(i < config.particleCount * config.followPercentage);
+                }
+            }
+
+            function createParticle(followsMouse) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random properties
+                const size = Math.random() * 4 + 2;
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                const speed = Math.random() * 2 + config.baseSpeed;
+                const opacity = Math.random() * 0.5 + 0.3;
+                
+                particle.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: rgba(255, 255, 255, ${opacity});
+                    transform: translate(${x}px, ${y}px);
+                `;
+                
+                particlesContainer.appendChild(particle);
+                
+                particles.push({
+                    element: particle,
+                    x,
+                    y,
+                    size,
+                    speed,
+                    followsMouse,
+                    driftSpeed: Math.random() * 0.02 + 0.01,
+                    canExplode: true
+                });
+            }
+
+            // Animation loop
+            function animate() {
+                updateParticles();
+                animationFrameId = requestAnimationFrame(animate);
+            }
+
+            function updateParticles() {
+                const now = Date.now();
+                const mouseActive = now - lastMouseMove < 2000;
+                
+                particles.forEach((p, i) => {
+                    // Update position
+                    if (p.followsMouse && mouseActive) {
+                        const dx = mouseX - p.x;
+                        const dy = mouseY - p.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 200) {
+                            p.x += dx * p.driftSpeed;
+                            p.y += dy * p.driftSpeed * 0.5;
+                        }
+                    }
+                    
+                    // Vertical movement
+                    p.y += p.speed;
+                    
+                    // Reset if out of view
+                    if (p.y > window.innerHeight + 50) {
+                        resetParticle(p);
+                    }
+                    
+                    // Apply transform
+                    p.element.style.transform = `translate(${p.x}px, ${p.y}px)`;
+                    
+                    // Random explosions
+                    if (p.canExplode && p.y > window.innerHeight * 0.6 && Math.random() < config.explosionChance) {
+                        explodeToCryptoIcon(p);
+                    }
+                });
+            }
+
+            function resetParticle(p) {
+                p.x = Math.random() * window.innerWidth;
+                p.y = -50;
+                p.canExplode = true;
+                p.element.className = 'particle';
+                p.element.innerHTML = '';
+                p.element.style.width = `${p.size}px`;
+                p.element.style.height = `${p.size}px`;
+                p.element.style.background = `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`;
+            }
+
+            function explodeToCryptoIcon(p) {
+                p.canExplode = false;
+                p.element.className = 'particle icon';
+                
+                const cryptoKeys = Object.keys(config.cryptoIcons);
+                const randomCrypto = cryptoKeys[Math.floor(Math.random() * cryptoKeys.length)];
+                
+                p.element.innerHTML = `
+                    <div class="crypto-icon" 
+                         style="background-image: url('${config.cryptoIcons[randomCrypto]}')">
+                    </div>`;
+                
+                p.element.style.width = '40px';
+                p.element.style.height = '40px';
+                p.element.style.cursor = 'pointer';
+                
+                // Click handler for fireball effect
+                p.element.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    createFireball(e.clientX, e.clientY);
+                    resetParticle(p);
+                });
+                
+                // Revert after delay
+                setTimeout(() => {
+                    if (!p.canExplode) resetParticle(p);
+                }, 5000);
+            }
+
+            function createFireball(x, y) {
+                const fireball = document.createElement('div');
+                fireball.className = 'fireball';
+                fireball.style.cssText = `
+                    left: ${x - 50}px;
+                    top: ${y - 50}px;
+                    width: 100px;
+                    height: 100px;
+                    background: radial-gradient(circle, #ff9a00, #ff0000, #8b0000);
+                `;
+                
+                particlesContainer.appendChild(fireball);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    fireball.remove();
+                }, 500);
+                
+                // Create smoke
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const smoke = document.createElement('div');
+                        smoke.className = 'smoke';
+                        smoke.style.cssText = `
+                            left: ${x - 25 + (Math.random() * 20 - 10)}px;
+                            top: ${y - 25 + (Math.random() * 20 - 10)}px;
+                            width: 50px;
+                            height: 50px;
+                            background: radial-gradient(circle, rgba(100,100,100,0.8), rgba(50,50,50,0.5), rgba(20,20,20,0));
+                        `;
+                        
+                        particlesContainer.appendChild(smoke);
+                        
+                        setTimeout(() => {
+                            smoke.remove();
+                        }, 2000);
+                    }, i * 100);
+                }
+            }
+
+            // Event listeners
+            function setupEventListeners() {
+                // Mouse movement
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                    lastMouseMove = Date.now();
+                });
+                
+                // Touch movement
+                document.addEventListener('touchmove', (e) => {
+                    if (e.touches.length > 0) {
+                        mouseX = e.touches[0].clientX;
+                        mouseY = e.touches[0].clientY;
+                        lastMouseMove = Date.now();
+                    }
+                }, { passive: true });
+                
+                // Form submission
+                walletForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const address = document.getElementById('walletAddress').value.trim();
+                    
+                    if (!address) {
+                        showMessage('Please enter a valid wallet address', 'error');
+                        return;
+                    }
+                    
+                    showMessage('Verifying wallet address...', 'info');
+                    
+                    setTimeout(() => {
+                        window.location.href = `dashboard.php?address=${encodeURIComponent(address)}`;
+                    }, 1500);
+                });
+                
+                // Window resize
+                window.addEventListener('resize', () => {
+                    cancelAnimationFrame(animationFrameId);
+                    particles.forEach(p => p.element.remove());
+                    particles = [];
+                    init();
+                }, { passive: true });
+            }
+
+            function showMessage(text, type) {
+                messageEl.textContent = text;
+                messageEl.style.color = type === 'error' ? '#ff6b6b' : 'white';
+            }
+
+            // Start the app
+            init();
+        });
+    </script>
+</body>
+</html>

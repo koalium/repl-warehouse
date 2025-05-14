@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive 3D Cube with Camera Control</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        .inputContainer { position: absolute; top: 10px; left: 10px; }
+        .inputContainer input { margin-right: 10px; }
+        .sliderContainer { position: absolute; bottom: 10px; left: 10px; }
+        .sliderContainer label { margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <div class="inputContainer">
+        <input type="number" id="sideLengthXInput" placeholder="X side length" min="1" value="1">
+        <input type="number" id="sideLengthYInput" placeholder="Y side length" min="1" value="1">
+        <input type="number" id="sideLengthZInput" placeholder="Z side length" min="1" value="1">
+    </div>
+
+    <div class="sliderContainer">
+        <label for="cameraXSlider">Camera X:</label>
+        <input type="range" id="cameraXSlider" min="-10" max="10" value="0">
+        <label for="cameraYSlider">Camera Y:</label>
+        <input type="range" id="cameraYSlider" min="-10" max="10" value="0">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Scene setup
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create the cube with custom edges and dimensions
+        function createCubeWithEdges(x, y, z) {
+            var geometry = new THREE.BoxGeometry(x, y, z);
+            var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            var cube = new THREE.Mesh(geometry, material);
+
+            var edgesGeometry = new THREE.EdgesGeometry(geometry);
+            var edgesMaterial = new THREE.LineBasicMaterial({ color: 0x006600 }); // Darker green
+            var edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+            cube.add(edges);
+
+            return cube;
+        }
+
+        var cube = createCubeWithEdges(1, 1, 1); // Initial dimensions are 1x1x1
+        scene.add(cube);
+
+        camera.position.z = 5;
+
+        // Resize the cube based on user input for X, Y, Z dimensions
+        function updateCubeDimensions() {
+            var x = parseFloat(document.getElementById('sideLengthXInput').value);
+            var y = parseFloat(document.getElementById('sideLengthYInput').value);
+            var z = parseFloat(document.getElementById('sideLengthZInput').value);
+            scene.remove(cube);
+
+            cube = createCubeWithEdges(x, y, z);
+            scene.add(cube);
+        }
+
+        document.getElementById('sideLengthXInput').addEventListener('input', updateCubeDimensions);
+        document.getElementById('sideLengthYInput').addEventListener('input', updateCubeDimensions);
+        document.getElementById('sideLengthZInput').addEventListener('input', updateCubeDimensions);
+
+        // Camera control sliders
+        document.getElementById('cameraXSlider').addEventListener('input', function() {
+            camera.position.x = parseFloat(this.value);
+        });
+
+        document.getElementById('cameraYSlider').addEventListener('input', function() {
+            camera.position.y = parseFloat(this.value);
+        });
+
+        // Rotation function
+        function rotateCube(direction) {
+            var rotationAmount = Math.PI / 36; // 5 degrees
+            switch (direction) {
+                case 'left': cube.rotation.y -= rotationAmount; break;
+                case 'right': cube.rotation.y += rotationAmount; break;
+                case 'up': cube.rotation.x += rotationAmount; break;
+                case 'down': cube.rotation.x -= rotationAmount; break;
+            }
+        }
+
+        // Render loop
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Event listeners for rotation
+        document.addEventListener('click', function(event) {
+            var mouseX = event.clientX;
+            var mouseY = event.clientY;
+            var windowWidth = window.innerWidth;
+            var windowHeight = window.innerHeight;
+
+            if (mouseX < windowWidth / 3) rotateCube('left');
+            else if (mouseX > 2 * windowWidth / 3) rotateCube('right');
+
+            if (mouseY < windowHeight / 3) rotateCube('up');
+            else if (mouseY > 2 * windowHeight / 3) rotateCube('down');
+        });
+    </script>
+</body>
+</html>

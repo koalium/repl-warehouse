@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .wallet-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            margin-top: 0;
+            color: #4cc9f0;
+        }
+        
+        .back-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #3a56d4;
+        }
+        
+        /* New styles for verification card */
+        .verification-card {
+            background: rgba(101, 60, 165, 0.2);
+            border: 1px solid #6a3cb5;
+            grid-column: 1 / -1;
+        }
+        
+        .verification-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .verification-input {
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #4cc9f0;
+            background: rgba(0,0,0,0.3);
+            color: white;
+        }
+        
+        .verify-btn {
+            background: #4cc9f0;
+            color: #16213e;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .verify-btn:hover {
+            background: #3aa8d8;
+        }
+        
+        .status-active {
+            color: #4cc9f0;
+        }
+        
+        .status-completed {
+            color: #4ade80;
+        }
+        
+        .status-pending {
+            color: #f59e0b;
+        }
+        
+        .status-error {
+            color: #f87171;
+        }
+        
+        .tx-item, .asset-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <button class="back-btn" onclick="window.location.href='index.html'">Back to Portal</button>
+        </div>
+        
+        <div class="wallet-info">
+            <h2>Wallet Address: <span id="display-wallet"></span></h2>
+            <p>Status: <span class="status-active">Active</span></p>
+        </div>
+        
+        <div class="grid">
+            <!-- Verification Card -->
+            <div class="card verification-card">
+                <h3>Add TRX Transaction</h3>
+                <div class="verification-form">
+                    <input type="text" id="txHash" class="verification-input" placeholder="Enter TRX Transaction Hash">
+                    <button id="verifyBtn" class="verify-btn">Verify Transaction</button>
+                    <div id="verification-status"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Transaction History</h3>
+                <p>Your recent transactions</p>
+                <div id="transaction-list"></div>
+            </div>
+            
+            <div class="card">
+                <h3>Assets</h3>
+                <p>Your cryptocurrency holdings</p>
+                <div id="assets-list"></div>
+            </div>
+            
+            <div class="card">
+                <h3>Statistics</h3>
+                <p>Performance metrics</p>
+                <div id="stats-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const MY_WALLET = 'txjfylgf41641365431541';
+        const TRONSCAN_API = 'https://apilist.tronscan.org/api/transaction-info';
+        
+        // Display wallet address from localStorage
+        const walletAddress = localStorage.getItem('walletAddress') || 'Not found';
+        document.getElementById('display-wallet').textContent = walletAddress;
+        
+        // Initialize dashboard data
+        let dashboardData = {
+            transactions: [],
+            assets: [],
+            stats: {
+                profit: '0%',
+                volume: '$0',
+                trades: '0'
+            }
+        };
+        
+        // DOM Elements
+        const txList = document.getElementById('transaction-list');
+        const assetsList = document.getElementById('assets-list');
+        const statsContainer = document.getElementById('stats-container');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const txHashInput = document.getElementById('txHash');
+        const verificationStatus = document.getElementById('verification-status');
+        
+        // Fetch initial data from "database" (simulated)
+        async function fetchData() {
+            try {
+                // In a real app, you would fetch from your backend API
+                const response = await fetch('/api/dashboard?wallet=' + walletAddress);
+                const data = await response.json();
+                
+                // For this demo, we'll use localStorage as our "database"
+                const savedData = localStorage.getItem('dashboardData');
+                if (savedData) {
+                    dashboardData = JSON.parse(savedData);
+                } else {
+                    // Sample data if no saved data exists
+                    dashboardData = {
+                        transactions: [
+                            { 
+                                id: 1, 
+                                hash: 'abc123', 
+                                amount: '0.5 ETH', 
+                                date: new Date().toISOString().split('T')[0], 
+                                status: 'Completed',
+                                confirmed: true
+                            }
+                        ],
+                        assets: [
+                            { symbol: 'TRX', amount: '100', value: '$10' }
+                        ],
+                        stats: {
+                            profit: '+0%',
+                            volume: '$10',
+                            trades: '1'
+                        }
+                    };
+                    saveData();
+                }
+                
+                renderData();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        
+        // Save data to "database"
+        function saveData() {
+            localStorage.setItem('dashboardData', JSON.stringify(dashboardData));
+        }
+        
+        // Render data to UI
+        function renderData() {
+            // Clear existing content
+            txList.innerHTML = '';
+            assetsList.innerHTML = '';
+            
+            // Transactions
+            if (dashboardData.transactions.length === 0) {
+                txList.innerHTML = '<p>No transactions found</p>';
+            } else {
+                dashboardData.transactions.forEach(tx => {
+                    txList.innerHTML += `
+                        <div class="tx-item">
+                            <p>${tx.amount} - ${tx.date} 
+                                <span class="status-${tx.status.toLowerCase()}">
+                                    ${tx.status} ${tx.confirmed ? '✓' : ''}
+                                </span>
+                            </p>
+                            <small>${tx.hash.substring(0, 12)}...</small>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Assets
+            if (dashboardData.assets.length === 0) {
+                assetsList.innerHTML = '<p>No assets found</p>';
+            } else {
+                dashboardData.assets.forEach(asset => {
+                    assetsList.innerHTML += `
+                        <div class="asset-item">
+                            <p>${asset.symbol}: ${asset.amount} (${asset.value})</p>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Stats
+            statsContainer.innerHTML = `
+                <p>Profit: ${dashboardData.stats.profit}</p>
+                <p>Volume: ${dashboardData.stats.volume}</p>
+                <p>Trades: ${dashboardData.stats.trades}</p>
+            `;
+        }
+        
+        // Verify transaction with Tronscan
+        async function verifyTransaction(txHash) {
+            try {
+                verificationStatus.innerHTML = '<span class="loading"></span> Checking transaction...';
+                
+                // Check if already exists
+                const exists = dashboardData.transactions.some(tx => tx.hash === txHash);
+                if (exists) {
+                    verificationStatus.innerHTML = `<p class="status-error">This transaction is already recorded</p>`;
+                    return;
+                }
+                
+                // Check with Tronscan API
+                const response = await fetch(`${TRONSCAN_API}?hash=${txHash}`);
+                const data = await response.json();
+                
+                if (!data.hash) {
+                    verificationStatus.innerHTML = `<p class="status-error">Transaction not found on TRON network</p>`;
+                    return;
+                }
+                
+                // Check if transaction is to our wallet
+                const isToOurWallet = data.transferToAddress === MY_WALLET;
+                if (!isToOurWallet) {
+                    verificationStatus.innerHTML = `<p class="status-error">Transaction is not sent to our wallet address</p>`;
+                    return;
+                }
+                
+                // Check confirmation status
+                const isConfirmed = data.confirmed;
+                const amount = (data.amount / 1000000).toFixed(2) + ' TRX';
+                const date = new Date(data.timestamp).toISOString().split('T')[0];
+                
+                // Add to transactions
+                const newTx = {
+                    id: dashboardData.transactions.length + 1,
+                    hash: txHash,
+                    amount: amount,
+                    date: date,
+                    status: isConfirmed ? 'Completed' : 'Pending',
+                    confirmed: isConfirmed
+                };
+                
+                dashboardData.transactions.unshift(newTx); // Add to beginning
+                
+                // Update assets (simplified - in real app you'd do proper calculations)
+                const trxAsset = dashboardData.assets.find(a => a.symbol === 'TRX');
+                if (trxAsset) {
+                    const currentAmount = parseFloat(trxAsset.amount);
+                    const addedAmount = parseFloat(amount);
+                    trxAsset.amount = (currentAmount + addedAmount).toFixed(2);
+                    trxAsset.value = `$${(currentAmount + addedAmount) * 0.10}`; // Sample valuation
+                } else {
+                    dashboardData.assets.push({
+                        symbol: 'TRX',
+                        amount: amount.split(' ')[0],
+                        value: `$${(parseFloat(amount.split(' ')[0]) * 0.10).toFixed(2)}`
+                    });
+                }
+                
+                // Update stats
+                dashboardData.stats.trades = (parseInt(dashboardData.stats.trades) + 1).toString();
+                dashboardData.stats.volume = `$${(parseFloat(dashboardData.stats.volume.replace('$','')) + parseFloat(amount)).toFixed(2)}`;
+                
+                // Save and render
+                saveData();
+                renderData();
+                
+                verificationStatus.innerHTML = `<p class="status-completed">Transaction verified and added successfully!</p>`;
+                txHashInput.value = '';
+                
+            } catch (error) {
+                console.error('Verification error:', error);
+                verificationStatus.innerHTML = `<p class="status-error">Error verifying transaction: ${error.message}</p>`;
+            }
+        }
+        
+        // Event Listeners
+        verifyBtn.addEventListener('click', () => {
+            const txHash = txHashInput.value.trim();
+            if (!txHash) {
+                verificationStatus.innerHTML = `<p class="status-error">Please enter a transaction hash</p>`;
+                return;
+            }
+            verifyTransaction(txHash);
+        });
+        
+        // Initialize
+        fetchData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartis Dashboard</title>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            overflow: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            width: 100%;
+            height: 150px;
+            background-color: #0056b3;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .header .company-logo {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+        }
+
+        .header .company-logo img {
+            width: 80px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .header .profile {
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header .profile img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        .header .profile .mode {
+            margin-top: 10px;
+        }
+
+        .header .profile .mode button {
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: none;
+            background-color: #f8f8f8;
+            color: #0056b3;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Logo Animation */
+        @keyframes moveLogo {
+            0% {
+                transform: translate(calc(50vw - 40px), calc(50vh - 40px));
+            }
+            50% {
+                transform: translate(calc(50vw - 40px + 100px), calc(50vh - 40px - 100px));
+            }
+            100% {
+                transform: translate(20px, 20px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Container Styles */
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 150px);
+        }
+
+        .sidebar {
+            width: 100%;
+            background-color: #0073e6;
+            display: flex;
+            flex-direction: row;
+            padding: 10px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .sidebar a {
+            margin: 0 10px;
+            padding: 10px;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .sidebar a:hover {
+            background-color: #005bb5;
+            transform: scale(1.05);
+        }
+
+        .sidebar a img {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-sidebar {
+            width: 100%;
+            background-color: #0073e6;
+            padding: 10px;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .ac-control {
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .ac-control h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .zones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .zone {
+            width: 80px;
+            height: 80px;
+            background-color: #005bb5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .add-zone {
+            width: 80px;
+            height: 80px;
+            background-color: #0073e6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            border: 2px dashed #fff;
+        }
+
+        .add-zone:hover {
+            background-color: #005bb5;
+        }
+
+        .zone-control {
+            margin-bottom: 20px;
+        }
+
+        .zone-control h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .zone-control label {
+            display: block;
+            margin: 5px 0;
+        }
+
+        .zone-control input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            border-radius: 5px;
+            height: 8px;
+        }
+
+        .zone-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #0056b3;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .zone-control .sensor-data {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .zone-control .state-control {
+            margin-top: 10px;
+        }
+
+        .zone-control .state-control button {
+            margin-right: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: none;
+            background-color: #0056b3;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* Dark Mode Styles */
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode .header,
+        .dark-mode .sidebar,
+        .dark-mode .right-sidebar {
+            background-color: #444;
+        }
+
+        .dark-mode .main-content {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .dark-mode .sidebar a {
+            color: #ddd;
+        }
+
+        .dark-mode .sidebar a:hover {
+            background-color: #666;
+        }
+
+        .dark-mode .zone-control .sensor-data {
+            color: #ddd;
+        }
+
+        .dark-mode .zone-control .state-control button {
+            background-color: #666;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+
+            .sidebar {
+                width: 250px;
+                flex-direction: column;
+                height: calc(100vh - 150px);
+            }
+
+            .main-content {
+                margin: 20px;
+            }
+
+            .right-sidebar {
+                width: 250px;
+                height: calc(100vh - 150px);
+            }
+
+            .zone {
+                width: 100px;
+                height: 100px;
+                font-size: 1.2em;
+            }
+
+            .add-zone {
+                width: 100px;
+                height: 100px;
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="company-logo">
+            <img src="logo.png" alt="Smartis" id="logo">
+        </div>
+        <div class="profile">
+            <img src="profile.jpg" alt="Profile Picture">
+            <div>John Doe</div>
+            <div class="mode">
+                <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <a href="#" onclick="showContent('cameras')">
+                <img src="camera-icon.png" alt="Cameras" width="24"> Cameras
+            </a>
+            <a href="#" onclick="showContent('doors')">
+                <img src="door-icon.png" alt="Doors" width="24"> Doors
+            </a>
+            <a href="#" onclick="showContent('locks')">
+                <img src="lock-icon.png" alt="Locks" width="24"> Locks
+            </a>
+            <a href="#" onclick="showContent('router')">
+                <img src="router-icon.png" alt="Router" width="24"> Router
+            </a>
+            <a href="#" onclick="showContent('setting')">
+                <img src="setting-icon.png" alt="Setting" width="24"> Setting
+            </a>
+        </div>
+        <div class="main-content" id="main-content">
+            <p>Select a zone to monitor and control.</p>
+        </div>
+        <div class="right-sidebar">
+            <div class="ac-control">
+                <h3>AC Control</h3>
+                <button onclick="toggleAC()">ON/OFF</button>
+                <input type="range" min="16" max="30" value="22" oninput="updateTemp(this.value)">
+                <span id="ac-temp">22°C</span>
+            </div>
+            <div class="zones" id="zones-container">
+                <div class="zone" onclick="showZoneContent('Garage')">Garage</div>
+                <div class="zone" onclick="showZoneContent('Garden')">Garden</div>
+                <div class="zone" onclick="showZoneContent('Corridor')">Corridor</div>
+                <div class="zone" onclick="showZoneContent('Roof')">Roof</div>
+                <div class="zone" onclick="showZoneContent('Hall')">Hall</div>
+                <div class="zone" onclick="showZoneContent('Bedroom')">Bedroom</div>
+                <div class="zone" onclick="showZoneContent('Kitchen')">Kitchen</div>
+                <div class="zone" onclick="showZoneContent('Bathroom')">Bathroom</div>
+                <div class="zone" onclick="showZoneContent('Master Room')">Master Room</div>
+                <div class="zone" onclick="showZoneContent('Bedroom 2')">Bedroom 2</div>
+                <div class="zone" onclick="showZoneContent('Child Room')">Child Room</div>
+                <div class="add-zone" onclick="addNewZone()">+ Add Zone</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animate the logo
+        const logo = document.getElementById('logo');
+        logo.style.position = 'absolute';
+        logo.style.left = 'calc(50% - 40px)';
+        logo.style.top = 'calc(50% - 40px)';
+        logo.style.transition = 'all 2s ease-in-out';
+
+        setTimeout(() => {
+            logo.style.animation = 'moveLogo 2s forwards';
+        }, 100);
+
+        // Zone data storage
+        const zonesData = {
+            'Garage': { temp: 22, humidity: 45, ac: 'ON', light1: 50, light2: 30, motion: false, window: 'closed', door: 'locked' },
+            'Garden': { temp: 25, humidity: 60, ac: 'OFF', light1: 80, light2: 70, motion: true, window: 'open', door: 'unlocked' },
+            'Corridor': { temp: 20, humidity: 50, ac: 'ON', light1: 40, light2: 60, motion: false, window: 'closed', door: 'locked' },
+            'Roof': { temp: 30, humidity: 40, ac: 'OFF', light1: 0, light2: 0, motion: false, window: 'closed', door: 'locked' },
+            'Hall': { temp: 22, humidity: 55, ac: 'ON', light1: 70, light2: 50, motion: true, window: 'open', door: 'unlocked' },
+            'Bedroom': { temp: 24, humidity: 50, ac: 'ON', light1: 60, light2: 40, motion: false, window: 'closed', door: 'locked' },
+            'Kitchen': { temp: 26, humidity: 65, ac: 'OFF', light1: 90, light2: 80, motion: true, window: 'open', door: 'unlocked' },
+            'Bathroom': { temp: 23, humidity: 70, ac: 'ON', light1: 30, light2: 20, motion: false, window: 'closed', door: 'locked' },
+            'Master Room': { temp: 22, humidity: 50, ac: 'ON', light1: 50, light2: 50, motion: false, window: 'closed', door: 'locked' },
+            'Bedroom 2': { temp: 21, humidity: 55, ac: 'ON', light1: 40, light2: 30, motion: false, window: 'closed', door: 'locked' },
+            'Child Room': { temp: 23, humidity: 60, ac: 'ON', light1: 60, light2: 50, motion: false, window: 'closed', door: 'locked' },
+        };
+
+        function showZoneContent(zone) {
+            const mainContent = document.getElementById('main-content');
+            const data = zonesData[zone];
+
+            mainContent.innerHTML = `
+                <h2>${zone}</h2>
+                <div class="zone-control">
+                    <h3>Temperature & Humidity</h3>
+                    <div class="sensor-data">Temperature: ${data.temp}°C</div>
+                    <div class="sensor-data">Humidity: ${data.humidity}%</div>
+                </div>
+                <div class="zone-control">
+                    <h3>Air Conditioning</h3>
+                    <label>AC Status: ${data.ac}</label>
+                    <button onclick="toggleAC('${zone}')">Toggle AC</button>
+                </div>
+                <div class="zone-control">
+                    <h3>Light Control</h3>
+                    <label>Light 1: ${data.light1}%</label>
+                    <input type="range" min="0" max="100" value="${data.light1}" oninput="updateLight('${zone}', 'light1', this.value)">
+                    <label>Light 2: ${data.light2}%</label>
+                    <input type="range" min="0" max="100" value="${data.light2}" oninput="updateLight('${zone}', 'light2', this.value)">
+                </div>
+                <div class="zone-control">
+                    <h3>Window & Door</h3>
+                    <div class="state-control">
+                        <label>Window: ${data.window}</label>
+                        <button onclick="toggleWindow('${zone}')">Toggle Window</button>
+                    </div>
+                    <div class="state-control">
+                        <label>Door: ${data.door}</label>
+                        <button onclick="toggleDoor('${zone}')">Toggle Door</button>
+                    </div>
+                </div>
+                <div class="zone-control">
+                    <h3>Motion Detector</h3>
+                    <div class="sensor-data">Motion: ${data.motion ? 'Detected' : 'No Motion'}</div>
+                </div>
+            `;
+        }
+
+        function toggleAC(zone) {
+            zonesData[zone].ac = zonesData[zone].ac === 'ON' ? 'OFF' : 'ON';
+            showZoneContent(zone);
+        }
+
+        function updateLight(zone, light, value) {
+            zonesData[zone][light] = parseInt(value);
+            showZoneContent(zone);
+        }
+
+        function toggleWindow(zone) {
+            zonesData[zone].window = zonesData[zone].window === 'open' ? 'closed' : 'open';
+            showZoneContent(zone);
+        }
+
+        function toggleDoor(zone) {
+            zonesData[zone].door = zonesData[zone].door === 'locked' ? 'unlocked' : 'locked';
+            showZoneContent(zone);
+        }
+
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+        }
+
+        function addNewZone() {
+            const zoneName = prompt("Enter the name of the new zone:");
+            if (zoneName) {
+                zonesData[zoneName] = { temp: 22, humidity: 50, ac: 'OFF', light1: 0, light2: 0, motion: false, window: 'closed', door: 'locked' };
+                const zonesContainer = document.getElementById('zones-container');
+                const newZone = document.createElement('div');
+                newZone.className = 'zone';
+                newZone.innerText = zoneName;
+                newZone.onclick = () => showZoneContent(zoneName);
+                zonesContainer.insertBefore(newZone, zonesContainer.lastElementChild);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Portal</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            color: white;
+            
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 80% 20%; }
+            50% { background-position: 20% 100%; }
+            100% { background-position: 80% 20%; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px 60px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transform: translate(-50%, -50%);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border: none;
+            border-radius: 50px;
+            font-size: 1em;
+            outline: none;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+
+        button {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2575fc;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        /* Previous styles remain the same */
+        .particle.icon {
+            background: none !important;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .crypto-icon {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .particle.icon {
+            background: none !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.43s ease-out;
+        }
+        .crypto-icon {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: transform 0.43s ease-out;
+        }
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+		.particle.icon {
+            cursor: pointer;
+        }
+        .fireball {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ff9a00, #ff0000, #8b0000);
+            border-radius: 50%;
+            animation: fireballExplode 0.5s ease-out forwards;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .smoke {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, rgba(100,100,100,0.8), rgba(50,50,50,0.5), rgba(20,20,20,0));
+            border-radius: 50%;
+            animation: smokeDrift 2s ease-out forwards;
+            pointer-events: none;
+            z-index: 1;
+        }
+        @keyframes fireballExplode {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.8; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        @keyframes smokeDrift {
+            0% { transform: scale(0) translate(0, 0); opacity: 0.8; }
+            50% { transform: scale(1.5) translate(-20px, -20px); opacity: 0.6; }
+            100% { transform: scale(2) translate(-40px, -40px); opacity: 0; }
+        }
+		 /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            input[type="text"] {
+                margin: 15px 0;
+            }
+
+            button {
+                max-width: none;
+            }
+
+            /* Reduce particle effects for mobile */
+            .particle.icon {
+                display: none;
+            }
+
+            .fireball, .smoke {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                background: linear-gradient(45deg, #6a11cb, #2575fc);
+                animation: none;
+            }
+
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles"></div>
+    
+    <div class="container">
+        <h1>Welcome</h1>
+        <p>Enter your TRC20 wallet address to begin:</p>
+        <form id="walletForm">
+            <input type="text" id="walletAddress" name="walletAddress" 
+                   placeholder="Your TRC20 Wallet Address" maxlength="255" required>
+            <br>
+            <button type="submit">Confirm</button>
+        </form>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+		let expocounter = 0;
+		let pointsall=0;
+		let pointpericon = 1.1;
+		let expopericon = 0;
+		let makeiconduration = 25;
+		let formcheckduration = 2000;
+        let mouseX = window.innerWidth / 2;
+        let particles = [];
+        const particleCount = 440;
+        const followRadius = window.innerWidth * 0.33;
+        const followPercentage = 0.28;
+        let lastMouseMoveTime = Date.now();
+        let isMouseMoving = false;
+        const mouseStationaryTimeout = 1000;
+        const explosionDuration = 7430; // 0.43 seconds in milliseconds
+        const bottomExplosionThreshold = 0.95; // 62% of screen height
+		let fireballduration=500;
+		let smokeduration=2000;
+		let iconsizerattio = 1;
+		let fireballsizeratio=1;
+		let smokesizeratio =1;
+		let smoketimeratio =1;
+		let particlesizeratio = 1;
+		let particlespeedratio=1;
+		let particlewerightratio=1;
+		let particleacceleration = 1;
+		let iconweightratio=1;
+		
+        // Crypto icons
+        const cryptoIcons = {
+            trx: './img/avalanche-avax-logo.png',
+            bsc: './img/bnb-bnb-logo.png',
+            btc: './img/bitcoin-btc-logo.png',
+            eth: './img/ethereum-eth-logo.png',
+            usdt: './img/cosmos-atom-logo.png',
+            doge: './img/eos-eos-logo.png',
+            ltc: './img/internet-computer-icp-logo.png',
+            dot: './img/aave-aave-logo.png',
+			mot: './img/uniswap-uni-logo.png',
+			pot: './img/celestia-tia-logo.png',
+			kot: './img/amp-amp-logo.png',
+            matic: './img/decentraland-mana-logo.png'
+			
+        };
+
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            lastMouseMoveTime = Date.now();
+            if (!isMouseMoving) {
+                isMouseMoving = true;
+            }
+        });
+
+        // Check if mouse is stationary
+        function checkMouseMovement() {
+            if (isMouseMoving && Date.now() - lastMouseMoveTime > mouseStationaryTimeout) {
+                isMouseMoving = false;
+            }
+            requestAnimationFrame(checkMouseMovement);
+        }
+
+        let explosionProbability = 0.1; // Starting probability
+        const maxProbability = 0.65; // Maximum probability
+        const probabilityIncreaseRate = 0.01; // Increase per frame
+
+        class Particle {
+            constructor(followsMouse) {
+                this.element = document.createElement('div');
+                this.element.className = 'particle';
+                this.followsMouse = followsMouse;
+                this.hasExploded = false;
+                this.reset();
+                document.querySelector('.particles').appendChild(this.element);
+            }
+
+            reset() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = -50;
+                this.size = Math.random() * 5 + 2;
+                this.speed = Math.random() * 2 + 1;
+                this.driftSpeed = Math.random() * 0.02 + 0.01;
+                this.element.style.width = `${this.size}px`;
+                this.element.style.height = `${this.size}px`;
+                this.element.style.opacity = Math.random() * 0.5 + 0.3;
+                this.setNormalAppearance();
+            }
+
+            setNormalAppearance() {
+                this.element.classList.remove('icon');
+                this.element.innerHTML = '';
+                this.element.style.background = 
+                    Math.random() > 0.5 
+                    ? 'linear-gradient(to bottom, rgba(255, 255, 255, 0.85), transparent)' 
+                    : 'rgba(255, 255, 255, 0.3)';
+            }
+
+            canExplode() {
+                return !this.hasExploded && 
+                       (this.y / window.innerHeight) > (1 - bottomExplosionThreshold);
+            }
+
+            explodeToCryptoIcon() {
+                if (this.hasExploded) return;
+                
+                this.hasExploded = true;
+                this.element.classList.add('icon');
+                const cryptoKeys = Object.keys(cryptoIcons);
+                const randomCrypto = cryptoKeys[Math.floor(Math.random() * cryptoKeys.length)];
+                
+                // Explode animation
+                this.element.style.width = '64px';
+                this.element.style.height = '64px';
+                this.element.style.opacity = '1';
+                this.element.innerHTML = `
+                    <div class="crypto-icon" 
+                         style="background-image: url('${cryptoIcons[randomCrypto]}');
+                                animation: explode ${explosionDuration}ms ease-out;">
+                    </div>`;
+
+                // Add click event for fireball explosion
+                this.element.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.fireballExplode(e.clientX, e.clientY);
+                });
+
+                // Revert after explosion duration
+                setTimeout(() => {
+                    if (this.y < window.innerHeight + 50) {
+                        this.element.style.width = `${this.size}px`;
+                        this.element.style.height = `${this.size}px`;
+                        this.setNormalAppearance();
+                    }
+                }, explosionDuration);
+            }
+
+            fireballExplode(x, y) {
+                // Create fireball element
+                const fireball = document.createElement('div');
+                fireball.className = 'fireball';
+                fireball.style.left = `${x - 50}px`;
+                fireball.style.top = `${y - 50}px`;
+                document.querySelector('.particles').appendChild(fireball);
+
+                // Create smoke elements
+                for (let i = 0; i < 3; i++) {
+                    const smoke = document.createElement('div');
+                    smoke.className = 'smoke';
+                    smoke.style.left = `${x - 25}px`;
+                    smoke.style.top = `${y - 25}px`;
+                    smoke.style.animationDelay = `${i * 0.1}s`;
+                    document.querySelector('.particles').appendChild(smoke);
+
+                    setTimeout(() => {
+                        smoke.remove();
+                    }, smokeduration);
+                }
+				
+                // Remove fireball after animation
+                setTimeout(() => {
+                    fireball.remove();
+                }, fireballduration);
+
+                // Immediately hide the icon
+                this.element.style.opacity = '0';
+            }
+
+            update() {
+                if (this.followsMouse && isMouseMoving && Math.abs(this.x - mouseX) < followRadius) {
+                    const targetX = mouseX;
+                    this.x += (targetX - this.x) * this.driftSpeed * 0.5;
+                }
+                
+                this.y += this.speed;
+                this.element.style.transform = `translate(${this.x}px, ${this.y}px)`;
+
+                if (this.y > window.innerHeight + 50) {
+                    this.reset();
+                }
+            }
+        }
+
+        // Modified explodeRandomParticle function
+        function explodeRandomParticle() {
+            if (particles.length > 0) {
+                const eligibleParticles = particles.filter(p => p.canExplode());
+                if (eligibleParticles.length > 0 && Math.random() < explosionProbability) {
+                    const randomParticle = eligibleParticles[
+                        Math.floor(Math.random() * eligibleParticles.length)
+                    ];
+                    randomParticle.explodeToCryptoIcon();
+                    
+                    // Increase probability for next explosion
+                    explosionProbability = Math.min(maxProbability, 
+                        explosionProbability + probabilityIncreaseRate);
+                }
+            }
+            setTimeout(explodeRandomParticle, makeiconduration);
+        }
+
+        
+
+        // Create particles
+        function createParticles() {
+            const followCount = Math.floor(particleCount * followPercentage);
+            
+            for (let i = 0; i < followCount; i++) {
+                particles.push(new Particle(true));
+            }
+            
+            for (let i = followCount; i < particleCount; i++) {
+                particles.push(new Particle(false));
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            particles.forEach(particle => particle.update());
+            requestAnimationFrame(animate);
+        }
+		
+        // Initialize
+        createParticles();
+        checkMouseMovement();
+        animate();
+        explodeRandomParticle();
+
+        // Form handling
+        document.getElementById('walletForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const walletAddress = document.getElementById('walletAddress').value.trim();
+            const message = document.getElementById('message');
+            
+            if (!walletAddress) {
+                message.textContent = "Please enter a valid wallet address";
+                message.style.color = "#ffcccc";
+                return;
+            }
+
+            message.textContent = "Checking wallet address...";
+            message.style.color = "white";
+
+            setTimeout(() => {
+                window.location.href = `dash.html?address=${encodeURIComponent(walletAddress)}`;
+            }, formcheckduration);
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            followRadius = window.innerWidth * 0.28;
+        });
+    </script>
+</body>
+</html>

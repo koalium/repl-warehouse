@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .wallet-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            margin-top: 0;
+            color: #4cc9f0;
+        }
+        
+        .back-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #3a56d4;
+        }
+        
+        .verification-card {
+            background: rgba(101, 60, 165, 0.2);
+            border: 1px solid #6a3cb5;
+            grid-column: 1 / -1;
+        }
+        
+        .verification-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .verification-input {
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #4cc9f0;
+            background: rgba(0,0,0,0.3);
+            color: white;
+        }
+        
+        .verify-btn {
+            background: #4cc9f0;
+            color: #16213e;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .verify-btn:hover {
+            background: #3aa8d8;
+        }
+        
+        .status-active {
+            color: #4cc9f0;
+        }
+        
+        .status-completed {
+            color: #4ade80;
+        }
+        
+        .status-pending {
+            color: #f59e0b;
+        }
+        
+        .status-error {
+            color: #f87171;
+        }
+        
+        .tx-item, .asset-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <button class="back-btn" onclick="window.location.href='index.html'">Back to Portal</button>
+        </div>
+        
+        <div class="wallet-info">
+            <h2>Wallet Address: <span id="display-wallet"></span></h2>
+            <p>Status: <span class="status-active">Active</span></p>
+        </div>
+        
+        <div class="grid">
+            <!-- Verification Card -->
+            <div class="card verification-card">
+                <h3>Add TRX Transaction</h3>
+                <div class="verification-form">
+                    <input type="text" id="txHash" class="verification-input" placeholder="Enter TRX Transaction Hash">
+                    <button id="verifyBtn" class="verify-btn">Verify Transaction</button>
+                    <div id="verification-status"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Transaction History</h3>
+                <div id="transaction-list">Loading transactions...</div>
+            </div>
+            
+            <div class="card">
+                <h3>Assets</h3>
+                <div id="assets-list">Loading assets...</div>
+            </div>
+            
+            <div class="card">
+                <h3>Statistics</h3>
+                <div id="stats-container">Loading statistics...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Server endpoints
+        const API_BASE = '/api';
+        const ENDPOINTS = {
+            DASHBOARD: `${API_BASE}/dashboard`,
+            VERIFY_TX: `${API_BASE}/verify-tx`
+        };
+
+        // DOM Elements
+        const txList = document.getElementById('transaction-list');
+        const assetsList = document.getElementById('assets-list');
+        const statsContainer = document.getElementById('stats-container');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const txHashInput = document.getElementById('txHash');
+        const verificationStatus = document.getElementById('verification-status');
+        const walletDisplay = document.getElementById('display-wallet');
+
+        // Display wallet address from localStorage
+        const walletAddress = localStorage.getItem('walletAddress') || 'Not found';
+        walletDisplay.textContent = walletAddress;
+
+        // Fetch dashboard data from server
+        async function fetchDashboardData() {
+            try {
+                const response = await fetch(`${ENDPOINTS.DASHBOARD}?wallet=${encodeURIComponent(walletAddress)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                renderDashboard(data);
+            } catch (error) {
+                console.error('Failed to load dashboard:', error);
+                txList.innerHTML = `<p class="status-error">Failed to load transactions</p>`;
+                assetsList.innerHTML = `<p class="status-error">Failed to load assets</p>`;
+                statsContainer.innerHTML = `<p class="status-error">Failed to load statistics</p>`;
+            }
+        }
+
+        // Verify transaction with server
+        async function verifyTransaction(txHash) {
+            try {
+                verificationStatus.innerHTML = '<span class="loading"></span> Checking transaction...';
+                
+                const response = await fetch(ENDPOINTS.VERIFY_TX, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        wallet: walletAddress,
+                        txHash: txHash
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.message || 'Verification failed');
+                }
+                
+                verificationStatus.innerHTML = `
+                    <p class="status-completed">${result.message}</p>
+                    <p>Added ${result.amount} TRX</p>
+                `;
+                
+                txHashInput.value = '';
+                fetchDashboardData(); // Refresh all data
+            } catch (error) {
+                console.error('Verification error:', error);
+                verificationStatus.innerHTML = `
+                    <p class="status-error">${error.message}</p>
+                `;
+            }
+        }
+
+        // Render dashboard data
+        function renderDashboard(data) {
+            // Transactions
+            if (data.transactions && data.transactions.length > 0) {
+                txList.innerHTML = data.transactions.map(tx => `
+                    <div class="tx-item">
+                        <p>${tx.amount} - ${tx.date} 
+                            <span class="status-${tx.status.toLowerCase()}">
+                                ${tx.status} ${tx.confirmed ? '✓' : ''}
+                            </span>
+                        </p>
+                        <small>${tx.hash.substring(0, 12)}...</small>
+                    </div>
+                `).join('');
+            } else {
+                txList.innerHTML = '<p>No transactions found</p>';
+            }
+            
+            // Assets
+            if (data.assets && data.assets.length > 0) {
+                assetsList.innerHTML = data.assets.map(asset => `
+                    <div class="asset-item">
+                        <p>${asset.symbol}: ${asset.amount} (${asset.value})</p>
+                    </div>
+                `).join('');
+            } else {
+                assetsList.innerHTML = '<p>No assets found</p>';
+            }
+            
+            // Statistics
+            if (data.stats) {
+                statsContainer.innerHTML = `
+                    <p>Profit: ${data.stats.profit || '0%'}</p>
+                    <p>Volume: ${data.stats.volume || '$0'}</p>
+                    <p>Trades: ${data.stats.trades || '0'}</p>
+                `;
+            }
+        }
+
+        // Event Listeners
+        verifyBtn.addEventListener('click', () => {
+            const txHash = txHashInput.value.trim();
+            if (!txHash) {
+                verificationStatus.innerHTML = `<p class="status-error">Please enter a transaction hash</p>`;
+                return;
+            }
+            verifyTransaction(txHash);
+        });
+
+        // Initialize
+        fetchDashboardData();
+    </script>
+</body>
+</html>

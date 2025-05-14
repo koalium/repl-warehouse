@@ -1,0 +1,41 @@
+﻿name,namefa,density,price,metal,layers,desc
+ss304,استیل 304,8.22,4000000,y,"m,v",sheet
+ss316,استیل 316,8.18,4100000,y,"m,v",sheet
+monel ,مونل,8.8,8880000,y,"m,v",sheet
+inconel ,اینکونل,8.5,9990000,y,"m,v",sheet
+hastelloy,هستلوی,8.9,10100000,y,"m,v",sheet
+aluminium,آلومینیوم,2.7,2200000,y,"m,v",sheet
+titanium,تیتانیوم,4.7,8500000,y,"m,v",sheet
+nickel,نیکل,8.9,5000000,y,"m,v",sheet
+chromium,کروم,7.2,12300000,y,"m,v",sheet
+copper,مس,8.95,6853000,y,"m,v",sheet
+bronze,برنز,8.55,7560000,y,"m,v",sheet
+bras,برنج,8.7,7320000,y,"m,v",sheet
+zink,روی,7,7080000,y,"m,v",sheet
+silver,نقره,10.5,684230000,y,"m,v",sheet
+lead,سرب,11.4,6860000,y,"m,v",sheet
+magnesium,منیزیم,1.74,21350000,y,"m,v",sheet
+tin,قلع,6.55,6120000,y,"m,v",sheet
+graphite,گرافیت,2.25,2680000,y,"m,v",sheet
+tungsten,تنگستن,19.3,56000000,y,"m,v",sheet
+gold,طلا,19.3,54000000000,y,"m,v",sheet
+pltinum,پلاتین,21.4,51600000000,y,"m,v",sheet
+paladium,پالادیوم,12.2,492000000,y,"m,v",sheet
+cobalt,کبالت,8.66,4680000,y,"m,v",sheet
+germanium,ژرمانیوم,5.4,44400000,y,"m,v",sheet
+rhodium,رودیوم,12.44,4200000,y,"m,v",sheet
+cs,فولاد کربنی,8,1080000,y,"m,v",sheet
+iron,آهن,7,1150000,y,"m,v",sheet
+st37,کربن استیل اس تی 37,7.7,1120000,y,"m,v",sheet
+glas,شیشه,3.1,3720000,n,l,sheet
+klingersil,گسکت,1.2,3480000,n,g,sheet
+wooden box ,جعبه چوبی,0.8,1160000,n,box,sheet
+cardboard box,جعبه مقوایی,0.6,645000,n,box,sheet
+styrofoam,چوب پنبه,0.3,895000,n,box,sheet
+composite,کامپوزیت,1,1880000,n,s,sheet
+rubber,لاستیک,2,1650000,n,g,sheet
+plastic,پلاستیک,1.5,1200000,n,s,sheet
+fep,تفلون,4,1500000,n,s,sheet
+ptfe,تفلون,3,2200000,n,s,sheet
+pvc,پی وی سی,2,1000000,n,s,sheet
+tef,تفلون,2.5,1280000,n,s,sheet

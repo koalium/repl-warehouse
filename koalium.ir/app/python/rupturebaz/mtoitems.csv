@@ -1,0 +1,137 @@
+﻿element,type,item,itemf,unitf,pr,p0,p1
+rupture,rff,Sheet,ورق ,برگ,3000000,3000000,3000000
+rupture,rff,Sheet,ورق ,برگ,4000000,l,w
+rupture,rff,roll,رول,متر,1000000,l,t
+rupture,rff,material analysis,آنالیز متریال,عدد,18000000,15000000,qty
+rupture,rff,WireCut,وایرکات,عدد,38000000,2400000,qty_size
+rupture,rff,Waterjet/Laser,واترجت - لیزر,عدد,35000000,2800000,qty_size
+rupture,rf,heat Form,شکل دهی حرارتی,عدد,15000000,2000000,qty_size
+rupture,rf,heat Treatment,عملیات حرارتی,عدد,29000000,4200000,qty_size
+rupture,rf,hydro Forming,فورمینگ,عدد,36000000,3500000,qty_size
+rupture,1,Laser Marking,مارک,عدد,10000000,1000000,qty
+rupture,1,Test,تست,عدد,11000000,2000000,qty_size
+rupture,1,Styrofoam,محافظ,عدد,5000000,200000,qty_size
+rupture,1,Cardboard Box,کارتن,عدد,5000000,250000,qty_size
+rupture,1,boxing,بسته بندی,عدد,5000000,150000,qty_size
+rupture,1,shipping,ارسال,عدد,15000000,500000,qty_size
+rupture,1,sensor,سنسور,عدد,20000000,18000000,qty_size
+holder,11,Vent Side holder,گرده,عدد,,od,t
+holder,11,Process Side holder,گرده,عدد,,od,t
+holder,11,Machinery,ماشینکاری تراش,عدد,,.,
+holder,11,Wirecut/Waterjet,وایرکات- واترجت,عدد,,.,
+holder,11,Milling cnc,فرز cnc,عدد,,.,
+holder,11,Wooden Box ,جعبه چوبی,عدد,,.,
+holder,11,Styrofoam,محافظ,عدد,,.,
+vaccumbreaker,,tube,لوله 14 اینچ استیل 304,عدد,,Mat. s304 - D in = 336.5 mm - D out = 355.6 mm - L = 150 mm,
+vaccumbreaker,,tube,لوله ¾ اینچ استیل 304,عدد,,Mat. s304 - D in = 20.9 - D out = 26.7 - L = 250 mm,
+vaccumbreaker,,shaft,شفت استیل 304 به قطر 20 میل,عدد,,Mat. s304 or s316 - D = 20 mm  - L = 350 mm,
+vaccumbreaker,,plate,ورق استیل 12 میل,عدد,,Mat. s304  - 1500*3000*12 mm³ - ضایعات انبار رو باز ,
+vaccumbreaker,,sheet,ورق استیل 6 میل,عدد,,Mat. s304  -700*500*6 mm³ ,
+vaccumbreaker,,plate,ورق استیل 2 میل,عدد,,Mat. s304  -440*440*2 mm³ ,
+vaccumbreaker,,gasket,گسکت لاستیکی ,عدد,,Mat. Rubber - width = 1 m - THK = 3 mm,
+vaccumbreaker,,mesh,توری استیل,عدد,,Mat. SS - 430*430 mm²,
+vaccumbreaker,,screw,پیچ آلن 4 استیل,عدد,,"Hex Bolt, M4x30",
+vaccumbreaker,,nut,مهره 4 استیل,عدد,,"Hex Nut, M4",
+vaccumbreaker,,screw,پیچ آچاری 12 استیل,عدد,,"Hex Bolt, M12x30",
+vaccumbreaker,,washer,واشر 12 استیل,عدد,,"Flat Washer, M12",
+vaccumbreaker,,spring washer,واشر فنری 12 استیل,عدد,,"Spring Washer, M12",
+vaccumbreaker,,nut,مهره 10 استیل,عدد,,"Hex Nut, M10",
+vaccumbreaker,,steel washer,واشر 10 استیل,عدد,,"Flat Washer, M10",
+vaccumbreaker,,spring washer,واشر فنری 10 استیل,عدد,,"Spring Washer, M10",
+vaccumbreaker,,material analysis,آنالیز متریال,عدد,,,
+vaccumbreaker,,laser/waterjet,برشکاری (لیزر/ واترجت),عدد,,,
+vaccumbreaker,,boxing,بسته بندی,عدد,,,
+vaccumbreaker,,shipping,ارسال,عدد,,,
+breathervalve,,بدنه شیر تنفسی  4 اینچ,فلنج استیل 1½ اینچ,عدد,,,
+breathervalve,,ورق آهن 15 میلیمتر ,لوله 1½ اینچ استیل,عدد,,,
+breathervalve,,ورق آهن 10 میلیمتر,لوله 3 اینچ استیل,عدد,,,
+breathervalve,,ورق آهن 2 میلیمتر,لوله 5 اینچ استیل,عدد,,,
+breathervalve,,ورق آلومینیم 2 میلیمتر,لوله 3/8 اینچ استیل,عدد,,,
+breathervalve,,ورق استیل 10 میلیمتر,لوله 2 اینچ استیل,عدد,,,
+breathervalve,,ورق استیل 5 میلیمتر,شفت استیل 18 میل,عدد,,,
+breathervalve,,ورق استیل 12 میلیمتر,شفت استیل 10 میل,عدد,,,
+breathervalve,,ورق استیل 5 میلیمتر,شفت استیل 8 میل,عدد,,,
+breathervalve,,ورق استیل 3 میلیمتر,قلاب چشمی استیل ,عدد,,,
+breathervalve,,ورق استیل 1 میلیمتر,پیچ سر آلنی M4x15,عدد,,,
+breathervalve,,ورق استیل 2 میلیمتر,واشر فنری M4,عدد,,,
+breathervalve,,گسکت لاستیکی 1 میلیمتر,واشر تخت M4,عدد,,,
+breathervalve,,لوله 8 اینچ استیل,پیچ سر آلنی M3x15,عدد,,,
+breathervalve,,لوله 5 اینچ استیل,مهره M3,عدد,,,
+breathervalve,,شفت استیل 25 میلیمتر ,مهره M8,عدد,,,
+breathervalve,,شفت استیل 15 میلیمتر ,مهره M6,عدد,,,
+breathervalve,,شفت آلومینیوم 15 میلیمتر ,واشر تخت M6,عدد,,,
+breathervalve,,رنگ رال 9010  به همراه هاردنر,واشر فنری M6,عدد,,,
+breathervalve,,رنگ لایه اول (زینک ریچ اپوکسی),واشر تخت M8,عدد,,,
+breathervalve,,رنگ لایه دوم (اپوکسی پلی آمید),واشر فنری M8,عدد,,,
+breathervalve,,پیچ آلن  استیل M12 بطول 5 سانت,گسکت 1 میلیمتر,عدد,,,
+breathervalve,,مهره  استیل M12,مش قسمت وکیوم,عدد,,,
+breathervalve,,واشر تخت استیل M12,ورق 10 یا 12 میل استیل,عدد,,,
+breathervalve,,واشرفنری  استیل M12,ورق 6 میل استیل,عدد,,,
+breathervalve,,مهره  استیل M10,ورق 3 میل استیل,عدد,,,
+breathervalve,,پیچ آلن استیل M8 بطول 2 سانت,ورق 2 میل استیل,عدد,,,
+breathervalve,,پیچ آلن استیل M8 بطول 2.5 سانت,جوشکاری,عدد,,,
+breathervalve,,واشر تخت  استیل M8,خمکاری,عدد,,,
+breathervalve,,واشرفنری  استیل M8,برش لیزر,عدد,,,
+breathervalve,,پیچ آلن استیل M4 بطول 1 سانت,بسته بندی,عدد,,,
+breathervalve,,مهره M4,ارسال,عدد,,,
+breathervalve,,قلاب چشمی نری M12,مش قسمت وکیوم,عدد,,,
+breathervalve,,نورد,ورق 10 یا 12 میل استیل,عدد,,,
+breathervalve,,خمکاری,خمکاری,عدد,,,
+breathervalve,,آنالیز متریال,ورق 6 میل استیل,عدد,,,
+breathervalve,,برشکاری (لیزر/ واترجت),ورق 3 میل استیل,عدد,,,
+breathervalve,,بسته بندی,ورق 2 میل استیل,عدد,,,
+breathervalve,,ارسال,جوشکاری,عدد,,,
+breathervalve,,برش لیزر,برش لیزر,عدد,,,
+breathervalve,,بسته بندی,بسته بندی,عدد,,,
+breathervalve,,ارسال,ارسال,عدد,,,
+flamearrestor,,فلنج size_1 اینچ,فلنج size_1 اینچ,عدد,24000000,96000000,WN - PN16 - ASTM A105
+flamearrestor,,فلنج size_2 اینچ,فلنج size_2 اینچ,عدد,48000000,192000000,DN200 - PN16 - ASTM A105
+flamearrestor,,ردیوسر size_1 یه size_2 اینچ,ردیوسر size_1 یه size_2 اینچ,عدد,15000000,60000000,A234 - WPB
+flamearrestor,,ورق استیل ,ورق استیل ,سانتیمتر,2600000,117000000,SS420 or SS430 - THK = 15 mm 
+flamearrestor,,رول ورق استیل,رول ورق استیل,عدد,8500000,74800000,SS316L - THK = 0.2 mm - Width = 15mm
+flamearrestor,,لوله 10 اینچ به طول 6 سانت ,لوله 10 اینچ به طول 6 سانت ,عدد,1200000,19200000,Mat = CS - THK = 15mm - SCH 80 
+flamearrestor,,یپچ و مهره 14 ,یپچ و مهره 14 ,عدد,650000,1300000,M14 - L = 70 mm - Mat. SS
+flamearrestor,,استاد بولت ¾ اینچ,استاد بولت ¾ اینچ,عدد,1500000,24000000,Mat. A193 B7 & A194 2H - L = 150mm
+flamearrestor,,گسکت رنگی (Klingersil),گسکت رنگی (Klingersil),عدد,4000000,16000000,Size 8 inch - THK = 1.5 mm 
+flamearrestor,,رول تفلون 0.5 میل ,رول تفلون 0.5 میل ,متر,10000000,30000000,Width = 120 cm
+flamearrestor,,توری استیل,توری استیل,سانتیمتر,5000000,5000000,Mat. SS
+flamearrestor,,آنالیز متریال ,آنالیز متریال ,-,4000000,16000000,-
+flamearrestor,,لیزر - واترجت,لیزر - واترجت,-,30000000,30000000,-
+flamearrestor,,ماشینکاری,ماشینکاری,-,30000000,30000000,-
+flamearrestor,,جوشکاری,جوشکاری,-,80000000,80000000,-
+flamearrestor,,رنگ,رنگ,,15000000,90000000,Ral 3020
+flamearrestor,,بسته بندی ,بسته بندی ,-,7000000,14000000,Wooden Box
+flamearrestor,,ارسال ,ارسال ,-,50000000,50000000,-
+explosiondoor,,"ورق 5 میل (Baffle, Baffle support)","ورق 5 میل (Baffle, Baffle support)",عدد,,,
+explosiondoor,,ورق 15 میل (Baffle),ورق 15 میل (Baffle),عدد,,,
+explosiondoor,,ورق 10 میل (Baffle),ورق 10 میل (Baffle),عدد,,,
+explosiondoor,,ورق 1 میل( Covere),ورق 1 میل( Covere),عدد,,,
+explosiondoor,,ورق 3 میل (Door plate),ورق 3 میل (Door plate),عدد,,,
+explosiondoor,,ورق 2 میل (Door mesh ),ورق 2 میل (Door mesh ),عدد,,,
+explosiondoor,,پروفیل با ضخامت 2 میل (Door Frame),پروفیل با ضخامت 2 میل (Door Frame),عدد,,,
+explosiondoor,,"تسمه (Hinge, Retainer)","تسمه (Hinge, Retainer)",عدد,,,
+explosiondoor,,نبشی با ضخامت 5 میل,نبشی با ضخامت 5 میل,عدد,,,
+explosiondoor,,فنرهای ضربه گیر,فنرهای ضربه گیر,عدد,,,
+explosiondoor,,فنرهای ضامن,فنرهای ضامن,عدد,,,
+explosiondoor,,سیلینگ در,سیلینگ در,عدد,,,
+explosiondoor,,لاستیک ضربه گیر,لاستیک ضربه گیر,عدد,,,
+explosiondoor,,ضامن,ضامن,عدد,,,
+explosiondoor,,سنسور,سنسور,عدد,,,
+explosiondoor,,گسکت,گسکت,عدد,,,
+explosiondoor,,پیچ و مهره و پین,پیچ و مهره و پین,عدد,,,
+explosiondoor,,گسکت کانکشن,گسکت کانکشن,عدد,,,
+explosiondoor,,پیچ و مهره کانکشن - استاد بولت,پیچ و مهره کانکشن - استاد بولت,عدد,,,
+explosiondoor,,لیزر,لیزر,عدد,,,
+explosiondoor,,ماشین کاری,ماشین کاری,عدد,,,
+explosiondoor,,جوشکاری,جوشکاری,عدد,,,
+explosiondoor,,آنالیز متریال و سایر تست ها,آنالیز متریال و سایر تست ها,عدد,,,
+explosiondoor,,رنگ,رنگ,عدد,,,
+explosiondoor,,بسته بندی و ارسال,بسته بندی و ارسال,عدد,,,
+mtoheader,header,index,ردیف,,,,
+mtoheader,header,element,نام قطعه ,,,,
+mtoheader,header,properties,مشخصات,,,,
+mtoheader,header,Qty,مقدار,,,,
+mtoheader,header,Unit,واحد,,,,
+mtoheader,header,Mass(kg),وزن (کیلوگرم),,,,
+mtoheader,header,unit Price,قیمت واحد (ريال),,,,
+mtoheader,header,Price,قیمت کل (ريال),,,,
